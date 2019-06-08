@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>LatheCalc</h1>
+    <p>
+      Suggests which gear to use when machining various materials.
+      Works with a Grizzly G4000.
+    </p>
+  </header>
+  <main>
+    <section>
+      <h2>Materials</h2>
+      <label>
+        Tool Material
+        <select v-model="toolMaterial">
+          <option></option>
+          <option v-for="material in toolMaterials" v-bind:value="material">{{ material }}</option>
+        </select>
+      </label>
+      <label>
+        Work Material
+        <select v-model="workMaterial">
+          <option></option>
+          <option v-for="material in workMaterials" v-bind:value="material">{{ material }}</option>
+        </select>
+      </label>
+      <h2>Work Measurements</h2>
+      <label>
+        Hardness
+        <select v-model="workHardness">
+          <option></option>
+          <option v-for="range in workHardnesses" v-bind:value="range">{{ range }}</option>
+        </select>
+      </label>
+      <label v-if="unknownHardness">
+        Choose a speed
+        <select v-model="manualSFM">
+          <option v-for="speed in validSpeeds" v-bind:value="speed">{{ speed }}SFM</option>
+        </select>
+      </label>
+      <label>
+        Diameter
+        <input v-model="diameter" type="number" step="0.5" />(in)
+      </label>
+    </section>
+    <section v-if="showResults">
+      <h2>Results</h2>
+      <h3>Target RPM</h3>
+      <p>
+        {{ rpm }}
+      </p>
+      <h3>Suggested gear(s)</h3>
+      <ul>
+        <li v-for="gear in latheGears"> {{ gear.name }}: {{ gear.speed }} Difference: {{ gear.getPercentDiff(rpm) }}%
+        </li>
+      </ul>
+    </section>
+  </main>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
